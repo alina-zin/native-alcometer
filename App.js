@@ -7,7 +7,7 @@ export default function App() {
   const [weight, setWeight] = useState(0);
   const [bottles, setBottles] = useState(1);
   const [time, setTime] = useState(1);
-  const [gender, setGender] = useState('male');
+  const [gender, setGender] = useState(0);
   const [alcoLevel, setAlcoLevel] = useState(0);
 
   const bottle = Array();
@@ -27,9 +27,26 @@ export default function App() {
   hours.push({label: '6 hours', value: 6});
 
   const genders = [
-    {label: 'Male', value: 'male'},
-    {label: 'Female', value: 'female'}
+    {label: 'Male', value: 0},
+    {label: 'Female', value: 1}
   ];
+
+  function calculate(){
+    let result = 0;
+
+    let litres = bottles * 0.33;
+    let grams = litres * 8 * 4.5;
+    let burn = weight / 10;
+    let gramsLeft = grams - (burn * time);
+
+    if (gender === 0) {
+      result = gramsLeft / (weight * 0.7);
+    } else {
+      result = gramsLeft / (weight * 0.6);
+    }
+
+    setAlcoLevel(result);
+  }
 
   return (
     <View style={styles.container}>
@@ -56,6 +73,14 @@ export default function App() {
               <Picker.Item key = {index} label = {time.label} value = {time.value} />
             ))}
         </Picker>
+        <Text>Gender</Text>
+        <RadioForm
+          buttonSize = {10}
+          radio_props = {genders}
+          initial = {gender}
+          onPress = {(value) => {setGender(value)}} />
+        <Text>{alcoLevel.toFixed(2)}</Text>
+        <Button onPress={calculate} title = "Calculate"></Button>
     </View>
   );
 }
