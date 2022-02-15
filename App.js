@@ -1,14 +1,16 @@
 import { Picker } from '@react-native-picker/picker';
 import RadioForm from 'react-native-simple-radio-button';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { Text, TextInput, Button, SafeAreaView, ScrollView, Alert } from 'react-native';
 import { useState } from 'react';
+import StyleSheet from './Styles';
+//import { SafeAreaView, ScrollView } from 'react-native-web';
 
 export default function App() {
-  const [weight, setWeight] = useState(0);
+  const [weight, setWeight] = useState();
   const [bottles, setBottles] = useState(1);
   const [time, setTime] = useState(1);
   const [gender, setGender] = useState(0);
-  const [alcoLevel, setAlcoLevel] = useState(0);
+  const [alcoLevel, setAlcoLevel] = useState();
 
   const bottle = Array();
   bottle.push({label: '1 bottle', value: 1});
@@ -31,64 +33,83 @@ export default function App() {
     {label: 'Female', value: 1}
   ];
 
+  const showAlert = () => {
+    Alert.alert(
+      "Warning",
+      "Weight is missing.",
+      [
+        {
+          text: "OK",
+          onPress: () => console.log("ok")
+        }
+      ]
+    );
+  }
+
   function calculate(){
     let result = 0;
 
-    let litres = bottles * 0.33;
-    let grams = litres * 8 * 4.5;
-    let burn = weight / 10;
-    let gramsLeft = grams - (burn * time);
-
-    if (gender === 0) {
-      result = gramsLeft / (weight * 0.7);
+    if (weight === 0) {
+      showAlert;
     } else {
-      result = gramsLeft / (weight * 0.6);
-    }
 
-    setAlcoLevel(result);
+      let litres = bottles * 0.33;
+      let grams = litres * 8 * 4.5;
+      let burn = weight / 10;
+      let gramsLeft = grams - (burn * time);
+
+      if (gender === 0) {
+        result = gramsLeft / (weight * 0.7);
+      } else {
+        result = gramsLeft / (weight * 0.6);
+      }
+
+      if (result > 0) {
+      setAlcoLevel(result.toFixed(2));
+      } else {
+        result = 0;
+        setAlcoLevel(result);
+      }
+    }
   }
 
+  
+
   return (
-    <View style={styles.container}>
-        <Text>Alcometer</Text>
-        <Text>Weight</Text>
-        <TextInput
-          onChangeText = {text => setWeight(text)}
-          placeholder = "in kilograms"
-          keyboardType = 'numeric'>
-        </TextInput>
-        <Text>Bottles</Text>
-        <Picker
-          onValueChange = {(itemValue) => setBottles(itemValue)}
-          selectedValue = {bottles} >
-            {bottle.map((bottles,index) => (
-              <Picker.Item key = {index} label = {bottles.label} value = {bottles.value} />
-            ))}
-        </Picker>
-        <Text>Time</Text>
-        <Picker
-          onValueChange = {(itemValue) => setTime(itemValue)}
-          selectedValue = {time} >
-            {hours.map((time,index) => (
-              <Picker.Item key = {index} label = {time.label} value = {time.value} />
-            ))}
-        </Picker>
-        <Text>Gender</Text>
-        <RadioForm
-          buttonSize = {10}
-          radio_props = {genders}
-          initial = {gender}
-          onPress = {(value) => {setGender(value)}} />
-        <Text>{alcoLevel.toFixed(2)}</Text>
-        <Button onPress={calculate} title = "Calculate"></Button>
-    </View>
+    <SafeAreaView style={StyleSheet.container}>
+      <ScrollView>
+          <Text>Alcometer</Text>
+          <Text>Weight</Text>
+          <TextInput
+            onChangeText = {text => setWeight(text)}
+            placeholder = "in kilograms"
+            keyboardType = 'numeric'>
+          </TextInput>
+          <Text>Bottles</Text>
+          <Picker
+            onValueChange = {(itemValue) => setBottles(itemValue)}
+            selectedValue = {bottles} >
+              {bottle.map((bottles,index) => (
+                <Picker.Item key = {index} label = {bottles.label} value = {bottles.value} />
+              ))}
+          </Picker>
+          <Text>Time</Text>
+          <Picker
+            onValueChange = {(itemValue) => setTime(itemValue)}
+            selectedValue = {time} >
+              {hours.map((time,index) => (
+                <Picker.Item key = {index} label = {time.label} value = {time.value} />
+              ))}
+          </Picker>
+          <Text>Gender</Text>
+          <RadioForm
+            buttonSize = {10}
+            radio_props = {genders}
+            initial = {gender}
+            onPress = {(value) => {setGender(value)}} />
+          <Text>{alcoLevel}</Text>
+          <Button onPress={calculate} title = "Calculate"></Button>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    marginTop: 50
-  },
-});
