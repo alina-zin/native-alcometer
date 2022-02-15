@@ -78,14 +78,14 @@ export default function App() {
   return (
     <SafeAreaView style={StyleSheet.container}>
       <ScrollView>
-          <Text>Alcometer</Text>
-          <Text>Weight</Text>
+        <Text style={StyleSheet.header}>Alcometer</Text>
+          <Text style={StyleSheet.label}>Weight</Text>
           <TextInput
             onChangeText = {text => setWeight(text)}
             placeholder = "in kilograms"
             keyboardType = 'numeric'>
           </TextInput>
-          <Text>Bottles</Text>
+          <Text style={StyleSheet.label}>Bottles</Text>
           <Picker
             onValueChange = {(itemValue) => setBottles(itemValue)}
             selectedValue = {bottles} >
@@ -93,7 +93,7 @@ export default function App() {
                 <Picker.Item key = {index} label = {bottles.label} value = {bottles.value} />
               ))}
           </Picker>
-          <Text>Time</Text>
+          <Text style={StyleSheet.label}>Time</Text>
           <Picker
             onValueChange = {(itemValue) => setTime(itemValue)}
             selectedValue = {time} >
@@ -101,13 +101,14 @@ export default function App() {
                 <Picker.Item key = {index} label = {time.label} value = {time.value} />
               ))}
           </Picker>
-          <Text>Gender</Text>
+          <Text style={StyleSheet.label}>Gender</Text>
           <RadioForm
+            style={StyleSheet.radio}
             buttonSize = {10}
             radio_props = {genders}
             initial = {gender}
             onPress = {(value) => {setGender(value)}} />
-          <Text>{alcoLevel}</Text>
+          <Text style={StyleSheet.result}>{alcoLevel}</Text>
           <Button onPress={calculate} title = "Calculate"></Button>
       </ScrollView>
     </SafeAreaView>
