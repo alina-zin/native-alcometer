@@ -33,6 +33,13 @@ export default StyleSheet.create({
 
     radio: {
       margin: 10,
+    },
+
+    author: {
+      marginTop: 40,
+      padding: 20,
+      textAlign: "center",
+      backgroundColor: "#DEE9FC",
     }
   });
   

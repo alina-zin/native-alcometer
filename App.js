@@ -33,7 +33,7 @@ export default function App() {
     {label: 'Female', value: 1}
   ];
 
-  const showAlert = () => {
+  /* const showAlert = () => {
     Alert.alert(
       "Warning",
       "Weight is missing.",
@@ -44,14 +44,15 @@ export default function App() {
         }
       ]
     );
-  }
+  } */
 
   function calculate(){
     let result = 0;
 
-    if (weight === 0) {
-      showAlert;
-    } else {
+    if (weight === 0 || isNaN(weight) === true) {
+      alert("Enter your weight");
+      return;
+    }
 
       let litres = bottles * 0.33;
       let grams = litres * 8 * 4.5;
@@ -71,7 +72,6 @@ export default function App() {
         setAlcoLevel(result);
       }
     }
-  }
 
   
 
@@ -110,6 +110,7 @@ export default function App() {
             onPress = {(value) => {setGender(value)}} />
           <Text style={StyleSheet.result}>{alcoLevel}</Text>
           <Button onPress={calculate} title = "Calculate"></Button>
+          <Text style={StyleSheet.author}>Author: Alina Zinchenko</Text>
       </ScrollView>
     </SafeAreaView>
   );
